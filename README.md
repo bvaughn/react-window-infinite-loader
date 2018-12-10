@@ -1,10 +1,16 @@
 # react-window-infinite-loader
 
-> InfiniteLoader component inspired by react-virtualized but for use with react-window
+> InfiniteLoader component inspired by react-virtualized but for use with [react-window](https://github.com/bvaughn/react-window/)
+
+[Demo](https://codesandbox.io/s/5wqo7z2np4)
 
 ## Install
 
 ```bash
+# Yarn
+yarn add react-window-infinite-loader
+
+# NPM
 npm install --save react-window-infinite-loader
 ```
 
