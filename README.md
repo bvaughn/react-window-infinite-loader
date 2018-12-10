@@ -19,7 +19,7 @@ npm install --save react-window-infinite-loader
 | `children` | `({ onItemsRendered: Function, ref: React$Ref }) => React$Node` | Render prop. See below for example usage. | 
 | `isItemLoaded` | `(index: number) => boolean` | Function responsible for tracking the loaded state of each item. |
 | `itemCount` | `number` | Number of rows in list; can be arbitrary high number if actual number is unknown. |
-| `loadMoreRows` | `(startIndex: number, stopIndex: number) => Promise<void>` | Callback to be invoked when more rows must be loaded. It should return a Promise that is resolved once all data has finished loading. |
+| `loadMoreItems` | `(startIndex: number, stopIndex: number) => Promise<void>` | Callback to be invoked when more rows must be loaded. It should return a Promise that is resolved once all data has finished loading. |
 | `minimumBatchSize` | `?number` | Minimum number of rows to be loaded at a time; defaults to 10. This property can be used to batch requests to reduce HTTP requests. |
 | `threshold` | `?number` | Threshold at which to pre-fetch data; defaults to 15. A threshold of 15 means that data will start loading when a user scrolls within 15 rows. |
 
@@ -29,7 +29,7 @@ npm install --save react-window-infinite-loader
 <InfiniteLoader
   isItemLoaded={isItemLoaded}
   itemCount={1000}
-  loadMoreRows={loadMoreRows}
+  loadMoreItems={loadMoreItems}
 >
   {({ onItemsRendered, ref }) => (
     <FixedSizeList
@@ -42,6 +42,68 @@ npm install --save react-window-infinite-loader
 ```
 
 [Try it on Code Sandbox](https://codesandbox.io/s/5wqo7z2np4)
+
+##  Creating an infinite loading list
+
+The `InfiniteLoader` component was created to help break large data sets down into chunks that could be just-in-time loaded as they were scrolled into view.
+It can also be used to create infinite loading lists (e.g. Facebook or Twitter).
+Here's a basic example of how you might implement that:
+
+```jsx
+function ExampleWrapper({
+  // Are there more items to load?
+  // (This information comes from the most recent API request.)
+  hasNextPage,
+
+  // Are we currently loading a page of items?
+  // (This may be an in-flight flag in your Redux store for example.)
+  isNextPageLoading,
+
+  // Array of items loaded so far.
+  items,
+
+  // Callback function responsible for loading the next page of items.
+  loadNextPage
+}) {
+  // If there are more items to be loaded then add an extra row to hold a loading indicator.
+  const itemCount = hasNextPage ? items.length + 1 : items.length;
+
+  // Only load 1 page of items at a time.
+  // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
+  const loadMoreItems = isNextPageLoading ? () => {} : loadNextPage;
+
+  // Every row is loaded except for our loading indicator row.
+  const isItemLoaded = index => !hasNextPage || index < items.length;
+
+  // Render an item or a loading indicator.
+  const Item = ({ index, style }) => {
+    let content;
+    if (!isItemLoaded(index)) {
+      content = "Loading...";
+    } else {
+      content = items[index].name;
+    }
+
+    return <div style={style}>{content}</div>;
+  };
+
+  return (
+    <InfiniteLoader
+      isItemLoaded={isItemLoaded}
+      itemCount={itemCount}
+      loadMoreItems={loadMoreItems}
+    >
+      {({ onItemsRendered, ref }) => (
+        <FixedSizeList
+          onItemsRendered={onItemsRendered}
+          ref={ref}
+          {...otherListProps}
+        />
+      )}
+    </InfiniteLoader>
+  );
+}
+```
 
 ## License
 

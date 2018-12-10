@@ -8,8 +8,8 @@ describe('InfiniteLoader', () => {
   let container;
   let isItemLoaded;
   let isItemLoadedMap = {};
-  let loadMoreRows;
-  let loadMoreRowsPromises;
+  let loadMoreItems;
+  let loadMoreItemsPromises;
   let innerOnRowsRendered;
   let Row;
 
@@ -20,8 +20,8 @@ describe('InfiniteLoader', () => {
     isItemLoaded = jest.fn(index => !!isItemLoadedMap[index]);
 
     autoResolve = true;
-    loadMoreRowsPromises = [];
-    loadMoreRows = jest.fn((startIndex, stopIndex) => {
+    loadMoreItemsPromises = [];
+    loadMoreItems = jest.fn((startIndex, stopIndex) => {
       for (let index = startIndex; index <= stopIndex; index++) {
         isItemLoadedMap[index] = true;
       }
@@ -29,7 +29,7 @@ describe('InfiniteLoader', () => {
         return Promise.resolve();
       } else {
         return new Promise(resolve => {
-          loadMoreRowsPromises.push(resolve);
+          loadMoreItemsPromises.push(resolve);
         });
       }
     });
@@ -51,7 +51,7 @@ describe('InfiniteLoader', () => {
       <InfiniteLoader
         isItemLoaded={isItemLoaded}
         itemCount={itemCount}
-        loadMoreRows={loadMoreRows}
+        loadMoreItems={loadMoreItems}
         minimumBatchSize={minimumBatchSize}
         threshold={threshold}
         {...rest}
@@ -89,7 +89,7 @@ describe('InfiniteLoader', () => {
         <InfiniteLoader
           isItemLoaded={isItemLoaded}
           itemCount={100}
-          loadMoreRows={loadMoreRows}
+          loadMoreItems={loadMoreItems}
         >
           {({ onItemsRendered, ref }) => null}
         </InfiniteLoader>,
@@ -106,6 +106,20 @@ describe('InfiniteLoader', () => {
       innerOnRowsRendered({});
       expect(console.warn).lastCalledWith(
         'Invalid onItemsRendered signature; please refer to InfiniteLoader documentation.'
+      );
+    });
+
+    it('should warn about deprecated loadMoreRows', () => {
+      spyOn(console, 'warn');
+      render(
+        getMarkup({
+          loadMoreItems: undefined,
+          loadMoreRows: loadMoreItems,
+        }),
+        container
+      );
+      expect(console.warn).lastCalledWith(
+        'InfiniteLoader "loadMoreRows" prop has been renamed to "loadMoreItems".'
       );
     });
   });
@@ -155,18 +169,18 @@ describe('InfiniteLoader', () => {
     });
   });
 
-  describe('loadMoreRows', () => {
-    it('should call :loadMoreRows for unloaded rows within the itemCount', () => {
+  describe('loadMoreItems', () => {
+    it('should call :loadMoreItems for unloaded rows within the itemCount', () => {
       render(getMarkup({ itemCount: 10 }), container);
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(0, 9);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(0, 9);
     });
 
     it('should trigger an update after the returned Promise resolves', async done => {
       render(getMarkup(), container);
       Row.mockClear();
       await Promise.resolve();
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
       expect(Row).toHaveBeenCalled();
       done();
     });
@@ -177,7 +191,7 @@ describe('InfiniteLoader', () => {
         <InfiniteLoader
           isItemLoaded={isItemLoaded}
           itemCount={100}
-          loadMoreRows={loadMoreRows}
+          loadMoreItems={loadMoreItems}
         >
           {({ onItemsRendered, ref }) => {
             return (
@@ -200,7 +214,7 @@ describe('InfiniteLoader', () => {
       Row.mockClear();
       itemSize.mockClear();
       await Promise.resolve();
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
       expect(itemSize).toHaveBeenCalled();
       expect(Row).toHaveBeenCalled();
       done();
@@ -214,17 +228,17 @@ describe('InfiniteLoader', () => {
 
       // Simulate a new range of rows being loaded
       innerOnRowsRendered({ visibleStartIndex: 50, visibleStopIndex: 55 });
-      expect(loadMoreRowsPromises).toHaveLength(2);
+      expect(loadMoreItemsPromises).toHaveLength(2);
       Row.mockClear();
 
       // Resolving the first promise should not re-render,
       // since that range of rows is no longer visible.
-      loadMoreRowsPromises[0]();
+      loadMoreItemsPromises[0]();
       await Promise.resolve();
       expect(Row).not.toHaveBeenCalled();
 
       // Resolving th second promise should cause a re-render though.
-      loadMoreRowsPromises[1]();
+      loadMoreItemsPromises[1]();
       await Promise.resolve();
       expect(Row).toHaveBeenCalled();
 
@@ -240,17 +254,17 @@ describe('InfiniteLoader', () => {
         }),
         container
       );
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
 
       innerOnRowsRendered({ visibleStartIndex: 0, visibleStopIndex: 15 });
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
 
       innerOnRowsRendered({ visibleStartIndex: 0, visibleStopIndex: 20 });
-      expect(loadMoreRows).toHaveBeenCalledTimes(2);
+      expect(loadMoreItems).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('resetLoadMoreRowsCache', () => {
+  describe('resetloadMoreItemsCache', () => {
     it('should reset memoized state', () => {
       const component = render(
         getMarkup({
@@ -261,16 +275,16 @@ describe('InfiniteLoader', () => {
         container
       );
       innerOnRowsRendered({ visibleStartIndex: 0, visibleStopIndex: 15 });
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(0, 19);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(0, 19);
 
-      loadMoreRows.mockClear();
-      component.resetLoadMoreRowsCache();
+      loadMoreItems.mockClear();
+      component.resetloadMoreItemsCache();
       innerOnRowsRendered({ visibleStartIndex: 0, visibleStopIndex: 15 });
-      expect(loadMoreRows).lastCalledWith(0, 19);
+      expect(loadMoreItems).lastCalledWith(0, 19);
     });
 
-    it('should call loadMoreRows if autoReload parameter is true', () => {
+    it('should call loadMoreItems if autoReload parameter is true', () => {
       const component = render(
         getMarkup({
           isItemLoaded: () => false,
@@ -282,11 +296,11 @@ describe('InfiniteLoader', () => {
 
       // Simulate a new range of rows being loaded
       innerOnRowsRendered({ visibleStartIndex: 20, visibleStopIndex: 30 });
-      expect(loadMoreRows).lastCalledWith(20, 30);
+      expect(loadMoreItems).lastCalledWith(20, 30);
 
-      loadMoreRows.mockClear();
-      component.resetLoadMoreRowsCache(true);
-      expect(loadMoreRows).lastCalledWith(20, 30);
+      loadMoreItems.mockClear();
+      component.resetloadMoreItemsCache(true);
+      expect(loadMoreItems).lastCalledWith(20, 30);
     });
   });
 
@@ -299,8 +313,8 @@ describe('InfiniteLoader', () => {
         }),
         container
       );
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(0, 9);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(0, 9);
     });
 
     it('should be respected when scrolling up', () => {
@@ -314,10 +328,10 @@ describe('InfiniteLoader', () => {
         }),
         container
       );
-      loadMoreRows.mockClear();
+      loadMoreItems.mockClear();
       ref.current.scrollToItem(15);
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(10, 19);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(10, 19);
     });
 
     it('should not interfere with the threshold', () => {
@@ -328,8 +342,8 @@ describe('InfiniteLoader', () => {
         }),
         container
       );
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(0, 15);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(0, 15);
     });
 
     it('should be respected minimumBatchSize if a user scrolls past the previous range', () => {
@@ -355,9 +369,9 @@ describe('InfiniteLoader', () => {
 
       // Simulate a new range of rows being loaded
       innerOnRowsRendered({ visibleStartIndex: 5, visibleStopIndex: 10 });
-      expect(loadMoreRows).toHaveBeenCalledTimes(2);
-      expect(loadMoreRows.mock.calls[0]).toEqual([0, 9]);
-      expect(loadMoreRows.mock.calls[1]).toEqual([10, 19]);
+      expect(loadMoreItems).toHaveBeenCalledTimes(2);
+      expect(loadMoreItems.mock.calls[0]).toEqual([0, 9]);
+      expect(loadMoreItems.mock.calls[1]).toEqual([10, 19]);
     });
 
     it('should not exceed item count if larger than needed', () => {
@@ -371,9 +385,9 @@ describe('InfiniteLoader', () => {
       );
       // Simulate a new range of rows being loaded
       innerOnRowsRendered({ visibleStartIndex: 18, visibleStopIndex: 22 });
-      expect(loadMoreRows).toHaveBeenCalledTimes(2);
-      expect(loadMoreRows.mock.calls[0]).toEqual([0, 9]);
-      expect(loadMoreRows.mock.calls[1]).toEqual([15, 24]);
+      expect(loadMoreItems).toHaveBeenCalledTimes(2);
+      expect(loadMoreItems.mock.calls[0]).toEqual([0, 9]);
+      expect(loadMoreItems.mock.calls[1]).toEqual([15, 24]);
     });
 
     it('should not go negative if larger than needed', () => {
@@ -389,11 +403,11 @@ describe('InfiniteLoader', () => {
       );
 
       ref.current.scrollToItem(15);
-      loadMoreRows.mockClear();
+      loadMoreItems.mockClear();
       ref.current.scrollToItem(2);
 
-      expect(loadMoreRows).toHaveBeenCalledTimes(1);
-      expect(loadMoreRows).lastCalledWith(0, 5);
+      expect(loadMoreItems).toHaveBeenCalledTimes(1);
+      expect(loadMoreItems).lastCalledWith(0, 5);
     });
   });
 });

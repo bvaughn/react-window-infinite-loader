@@ -25,7 +25,10 @@ export type Props = {|
 
   // Callback to be invoked when more rows must be loaded.
   // It should return a Promise that is resolved once all data has finished loading.
-  loadMoreRows: (startIndex: number, stopIndex: number) => Promise<void>,
+  loadMoreItems: (startIndex: number, stopIndex: number) => Promise<void>,
+
+  // Renamed to loadMoreItems in v1.0.3; will be removed in v2.0
+  loadMoreRows?: (startIndex: number, stopIndex: number) => Promise<void>,
 
   // Minimum number of rows to be loaded at a time; defaults to 10.
   // This property can be used to batch requests to reduce HTTP requests.
@@ -42,7 +45,7 @@ export default class InfiniteLoader extends PureComponent<Props> {
   _listRef: any;
   _memoizedUnloadedRanges: Ranges = [];
 
-  resetLoadMoreRowsCache(autoReload: boolean = false) {
+  resetloadMoreItemsCache(autoReload: boolean = false) {
     this._memoizedUnloadedRanges = [];
 
     if (autoReload) {
@@ -83,6 +86,12 @@ export default class InfiniteLoader extends PureComponent<Props> {
       ) {
         console.warn(
           'Invalid onItemsRendered signature; please refer to InfiniteLoader documentation.'
+        );
+      }
+
+      if (typeof this.props.loadMoreRows === 'function') {
+        console.warn(
+          'InfiniteLoader "loadMoreRows" prop has been renamed to "loadMoreItems".'
         );
       }
     }
@@ -129,10 +138,11 @@ export default class InfiniteLoader extends PureComponent<Props> {
   }
 
   _loadUnloadedRanges(unloadedRanges: Ranges) {
-    const { loadMoreRows } = this.props;
+    // loadMoreRows was renamed to loadMoreItems in v1.0.3; will be removed in v2.0
+    const loadMoreItems = this.props.loadMoreItems || this.props.loadMoreRows;
 
     unloadedRanges.forEach(([startIndex, stopIndex]) => {
-      let promise = loadMoreRows(startIndex, stopIndex);
+      let promise = loadMoreItems(startIndex, stopIndex);
       if (promise != null) {
         promise.then(() => {
           // Refresh the visible rows if any of them have just been loaded.
