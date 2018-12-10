@@ -2,8 +2,6 @@
 
 > InfiniteLoader component inspired by react-virtualized but for use with [react-window](https://github.com/bvaughn/react-window/)
 
-[Demo](https://codesandbox.io/s/5wqo7z2np4)
-
 ## Install
 
 ```bash
@@ -42,6 +40,8 @@ npm install --save react-window-infinite-loader
   )}
 </InfiniteLoader>
 ```
+
+[Try it on Code Sandbox](https://codesandbox.io/s/5wqo7z2np4)
 
 ## License
 
