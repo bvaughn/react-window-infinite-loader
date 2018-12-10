@@ -25,14 +25,22 @@ npm install --save react-window-infinite-loader
 
 ## Example usage
 
+The snippet below shows a basic example of how the `InfiniteLoader` can be used to wrap either a `FixedSizeList` or `VariableSizeList` from `react-window`.
+
 ```js
+// This value is arbitrary.
+// If you know the size of your remote data, you can provide a real value.
+// You can also increase this value gradually (as shown in the example below).
+const itemCount = 1000;
+
 <InfiniteLoader
   isItemLoaded={isItemLoaded}
-  itemCount={1000}
+  itemCount={itemCount}
   loadMoreItems={loadMoreItems}
 >
   {({ onItemsRendered, ref }) => (
     <FixedSizeList
+      itemCount={itemCount}
       onItemsRendered={onItemsRendered}
       ref={ref}
       {...otherListProps}
@@ -95,15 +103,18 @@ function ExampleWrapper({
     >
       {({ onItemsRendered, ref }) => (
         <FixedSizeList
+          itemCount={itemCount}
           onItemsRendered={onItemsRendered}
           ref={ref}
-          {...otherListProps}
+          {...props}
         />
       )}
     </InfiniteLoader>
   );
 }
 ```
+
+[Try it on Code Sandbox](https://codesandbox.io/s/x70ly749rq)
 
 ## License
 
