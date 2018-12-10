@@ -1,6 +1,6 @@
 {
   "name": "react-window-infinite-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description":
     "InfiniteLoader component inspired by react-virtualized but for use with react-window",
   "author":

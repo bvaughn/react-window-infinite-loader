@@ -145,6 +145,11 @@ export default class InfiniteLoader extends PureComponent<Props> {
               stopIndex,
             })
           ) {
+            // Handle an unmount while promises are still in flight.
+            if (this._listRef == null) {
+              return;
+            }
+
             // Resize cached row sizes for VariableSizeList,
             // otherwise just re-render the list.
             if (typeof this._listRef.resetAfterIndex === 'function') {
