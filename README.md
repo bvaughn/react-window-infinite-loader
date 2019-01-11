@@ -107,7 +107,9 @@ function ExampleWrapper({
           onItemsRendered={onItemsRendered}
           ref={ref}
           {...props}
-        />
+        >
+          {Item}
+        </FixedSizeList>
       )}
     </InfiniteLoader>
   );
