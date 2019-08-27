@@ -1,6 +1,7 @@
 // @flow
 
 import { PureComponent } from 'react';
+import isInteger from './isInteger';
 import isRangeVisible from './isRangeVisible';
 import scanForUnloadedRanges from './scanForUnloadedRanges';
 
@@ -80,10 +81,7 @@ export default class InfiniteLoader extends PureComponent<Props> {
     visibleStopIndex,
   }: onItemsRenderedParams) => {
     if (process.env.NODE_ENV !== 'production') {
-      if (
-        !Number.isInteger(visibleStartIndex) ||
-        !Number.isInteger(visibleStopIndex)
-      ) {
+      if (!isInteger(visibleStartIndex) || !isInteger(visibleStopIndex)) {
         console.warn(
           'Invalid onItemsRendered signature; please refer to InfiniteLoader documentation.'
         );
