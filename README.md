@@ -130,7 +130,7 @@ function ExampleWrapper({
   loadNextPage,
   sort,
 }) {
-  // we create a reference for the InfiniteLoader
+  // We create a reference for the InfiniteLoader
   const listRef = useRef(null);
   
   useEffect(() => {
