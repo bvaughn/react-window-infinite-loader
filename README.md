@@ -118,6 +118,66 @@ function ExampleWrapper({
 
 [Try it on Code Sandbox](https://codesandbox.io/s/x70ly749rq)
 
+## Advanced usage
+
+Some use-cases need the cached rows to be cleared for example a sorted list. Otherwise the InfiniteLoader won't call the function passed in `loadMoreItems` prop. This can be achieved by calling the `InfiniteLoader` component's method `resetloadMoreItemsCache`.
+
+```jsx
+function ExampleWrapper({
+  hasNextPage,
+  isNextPageLoading,
+  items,
+  loadNextPage,
+  sort,
+}) {
+  // we create a reference for the InfiniteLoader
+  const listRef = useRef(null);
+  
+  useEffect(() => {
+    if (listRef) {
+      // Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
+      listRef.current.resetloadMoreItemsCache()
+    }
+  }, [sort])
+  
+  const itemCount = hasNextPage ? items.length + 1 : items.length;
+  const loadMoreItems = isNextPageLoading ? () => {} : loadNextPage;
+  const isItemLoaded = index => !hasNextPage || index < items.length;
+
+  const Item = ({ index, style }) => {
+    let content;
+    if (!isItemLoaded(index)) {
+      content = "Loading...";
+    } else {
+      content = items[index].name;
+    }
+
+    return <div style={style}>{content}</div>;
+  };
+
+  // We passed down the ref to the InfiniteLoader component
+  return (
+    <InfiniteLoader
+      ref={listRef}
+      isItemLoaded={isItemLoaded}
+      itemCount={itemCount}
+      loadMoreItems={loadMoreItems}
+    >
+      {({ onItemsRendered, ref }) => (
+        <FixedSizeList
+          itemCount={itemCount}
+          onItemsRendered={onItemsRendered}
+          ref={ref}
+          {...props}
+        >
+          {Item}
+        </FixedSizeList>
+      )}
+    </InfiniteLoader>
+  );
+}
+```
+
 ## License
 
 MIT © [bvaughn](https://github.com/bvaughn)
