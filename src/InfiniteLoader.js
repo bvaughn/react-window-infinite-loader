@@ -124,7 +124,7 @@ export default class InfiniteLoader extends PureComponent<Props> {
     // This shouldn't be strictly necsesary, but is maybe nice to do.
     if (
       this._memoizedUnloadedRanges.length !== unloadedRanges.length ||
-      this._memoizedUnloadedRanges.find(
+      this._memoizedUnloadedRanges.some(
         ([startIndex, stopIndex], index) =>
           unloadedRanges[index][0] !== startIndex ||
           unloadedRanges[index][1] !== stopIndex
