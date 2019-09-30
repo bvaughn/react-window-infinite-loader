@@ -131,7 +131,7 @@ function ExampleWrapper({
   const listRef = useRef(null);
   
   useEffect(() => {
-    if (listRef) {
+    if (listRef.current) {
       // Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
       listRef.current.resetloadMoreItemsCache()
     }
