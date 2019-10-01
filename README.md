@@ -129,13 +129,15 @@ function ExampleWrapper({
 }) {
   // We create a reference for the InfiniteLoader
   const listRef = useRef(null);
-  
+  const hasMountedRef = useRef(false);
+
+  // Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
   useEffect(() => {
-    if (listRef.current) {
-      // Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
-      listRef.current.resetloadMoreItemsCache()
+    if (listRef.current && hasMountedRef.current) {
+      listRef.current.resetloadMoreItemsCache();
     }
-  }, [sortOrder])
+    hasMountedRef.current = true;
+  }, [sortOrder]);
   
   // ...
 
