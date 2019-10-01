@@ -118,6 +118,51 @@ function ExampleWrapper({
 
 [Try it on Code Sandbox](https://codesandbox.io/s/x70ly749rq)
 
+## Advanced usage
+
+Some use cases require cached items to be reset. For example, after a list has been sorted, previously cached items may be invalid. You can let `InfiniteLoader` know that it needs to reload cached items by calling the `resetloadMoreItemsCache` method.
+
+```jsx
+function ExampleWrapper({
+  // ...
+  sortOrder,
+}) {
+  // We create a reference for the InfiniteLoader
+  const infiniteLoaderRef = useRef(null);
+  const hasMountedRef = useRef(false);
+
+  // Each time the sort prop changed we called the method resetloadMoreItemsCache to clear the cache
+  useEffect(() => {
+    // We only need to reset cached items when "sortOrder" changes.
+    // This effect will run on mount too; there's no need to reset in that case.
+    if (hasMountedRef.current) {
+      if (infiniteLoaderRef.current) {
+        infiniteLoaderRef.current.resetloadMoreItemsCache();
+      }
+    }
+    hasMountedRef.current = true;
+  }, [sortOrder]);
+  
+  // ...
+
+  // We passed down the ref to the InfiniteLoader component
+  return (
+    <InfiniteLoader
+      ref={infiniteLoaderRef}
+      isItemLoaded={isItemLoaded}
+      itemCount={itemCount}
+      loadMoreItems={loadMoreItems}
+    >
+      {({ onItemsRendered, ref }) => (
+        // ...
+      )}
+    </InfiniteLoader>
+  );
+}
+```
+
+[Try it on Code Sandbox](https://codesandbox.io/embed/lucid-tree-7wnrq)
+
 ## License
 
 MIT © [bvaughn](https://github.com/bvaughn)
