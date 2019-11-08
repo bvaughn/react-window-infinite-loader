@@ -12,7 +12,7 @@ type onItemsRenderedParams = {
   visibleStopIndex: number,
 };
 type onItemsRendered = (params: onItemsRenderedParams) => void;
-type setRef = (ref: any) => void;
+type setRef = (ref: any) => any;
 
 export type Props = {|
   // Render prop.
@@ -102,6 +102,7 @@ export default class InfiniteLoader extends PureComponent<Props> {
 
   _setRef: setRef = (listRef: any) => {
     this._listRef = listRef;
+    return listRef;
   };
 
   _ensureRowsLoaded(startIndex: number, stopIndex: number) {
