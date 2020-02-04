@@ -112,6 +112,12 @@ export default class InfiniteLoader extends PureComponent<Props> {
       threshold = 15,
     } = this.props;
 
+    if (typeof itemCount !== 'number') {
+      console.warn(
+        'InfiniteLoader "itemCount prop expects a number. Omitting this value prevents loadMoreItems from being called"'
+      );
+    }
+
     const unloadedRanges = scanForUnloadedRanges({
       isItemLoaded,
       itemCount,
