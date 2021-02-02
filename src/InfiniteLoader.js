@@ -121,13 +121,11 @@ export default class InfiniteLoader extends PureComponent<Props> {
     });
 
     // Avoid calling load-rows unless range has changed.
-    // This shouldn't be strictly necsesary, but is maybe nice to do.
+    // This shouldn't be strictly necessary, but is maybe nice to do.
     if (
       this._memoizedUnloadedRanges.length !== unloadedRanges.length ||
       this._memoizedUnloadedRanges.some(
-        ([startIndex, stopIndex], index) =>
-          unloadedRanges[index][0] !== startIndex ||
-          unloadedRanges[index][1] !== stopIndex
+        (startOrStop, index) => unloadedRanges[index] !== startOrStop
       )
     ) {
       this._memoizedUnloadedRanges = unloadedRanges;
@@ -139,8 +137,10 @@ export default class InfiniteLoader extends PureComponent<Props> {
     // loadMoreRows was renamed to loadMoreItems in v1.0.3; will be removed in v2.0
     const loadMoreItems = this.props.loadMoreItems || this.props.loadMoreRows;
 
-    unloadedRanges.forEach(([startIndex, stopIndex]) => {
-      let promise = loadMoreItems(startIndex, stopIndex);
+    for (let i = 0; i < unloadedRanges.length; i += 2) {
+      const startIndex = unloadedRanges[i];
+      const stopIndex = unloadedRanges[i + 1];
+      const promise = loadMoreItems(startIndex, stopIndex);
       if (promise != null) {
         promise.then(() => {
           // Refresh the visible rows if any of them have just been loaded.
@@ -174,6 +174,6 @@ export default class InfiniteLoader extends PureComponent<Props> {
           }
         });
       }
-    });
+    }
   }
 }
