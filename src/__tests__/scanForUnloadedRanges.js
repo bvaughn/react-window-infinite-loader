@@ -22,7 +22,7 @@ describe('scanForUnloadedRanges', () => {
         startIndex: 0,
         stopIndex: 2,
       })
-    ).toEqual([[1, 1]]);
+    ).toEqual([1, 1]);
   });
 
   it('return a range of multiple unloaded rows', () => {
@@ -32,7 +32,7 @@ describe('scanForUnloadedRanges', () => {
         startIndex: 0,
         stopIndex: 2,
       })
-    ).toEqual([[0, 1]]);
+    ).toEqual([0, 1]);
   });
 
   it('return multiple ranges of unloaded rows', () => {
@@ -50,6 +50,6 @@ describe('scanForUnloadedRanges', () => {
         startIndex: 0,
         stopIndex: 6,
       })
-    ).toEqual([[1, 2], [4, 4], [6, 6]]);
+    ).toEqual([1, 2, 4, 4, 6, 6]);
   });
 });

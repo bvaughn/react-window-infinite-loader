@@ -29,10 +29,10 @@ export default function scanForUnloadedRanges({
         rangeStartIndex = index;
       }
     } else if (rangeStopIndex !== null) {
-      unloadedRanges.push([
+      unloadedRanges.push(
         ((rangeStartIndex: any): number),
-        ((rangeStopIndex: any): number),
-      ]);
+        ((rangeStopIndex: any): number)
+      );
 
       rangeStartIndex = rangeStopIndex = null;
     }
@@ -54,25 +54,23 @@ export default function scanForUnloadedRanges({
       }
     }
 
-    unloadedRanges.push([
+    unloadedRanges.push(
       ((rangeStartIndex: any): number),
-      ((rangeStopIndex: any): number),
-    ]);
+      ((rangeStopIndex: any): number)
+    );
   }
 
   // Check to see if our first range ended prematurely.
   // In this case we should scan backwards to try filling our :minimumBatchSize.
   if (unloadedRanges.length) {
-    let firstRange = unloadedRanges[0];
-
     while (
-      firstRange[1] - firstRange[0] + 1 < minimumBatchSize &&
-      firstRange[0] > 0
+      unloadedRanges[1] - unloadedRanges[0] + 1 < minimumBatchSize &&
+      unloadedRanges[0] > 0
     ) {
-      let index = firstRange[0] - 1;
+      let index = unloadedRanges[0] - 1;
 
       if (!isItemLoaded(index)) {
-        firstRange[0] = index;
+        unloadedRanges[0] = index;
       } else {
         break;
       }
