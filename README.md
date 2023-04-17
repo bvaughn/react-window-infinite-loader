@@ -2,6 +2,8 @@
 
 > InfiniteLoader component inspired by react-virtualized but for use with [react-window](https://github.com/bvaughn/react-window/)
 
+### If you like this project, 🎉 [become a sponsor](https://github.com/sponsors/bvaughn/) or ☕ [buy me a coffee](http://givebrian.coffee/)
+
 ## Install
 
 ```bash
