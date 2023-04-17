@@ -1,8 +1,10 @@
 {
   "name": "react-window-infinite-loader",
   "version": "1.0.9",
-  "description": "InfiniteLoader component inspired by react-virtualized but for use with react-window",
-  "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+  "description":
+    "InfiniteLoader component inspired by react-virtualized but for use with react-window",
+  "author":
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
   "contributors": [
     "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
   ],
@@ -34,9 +36,7 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "files": [
-    "dist/*"
-  ],
+  "files": ["dist/*"],
   "scripts": {
     "flow": "flow",
     "precommit": "lint-staged",
@@ -52,10 +52,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example,src}/**/*.{js,json,css}": [
-      "prettier --write",
-      "git add"
-    ],
+    "{example,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
     "**/*.js": "eslint --max-warnings 0"
   },
   "peerDependencies": {
