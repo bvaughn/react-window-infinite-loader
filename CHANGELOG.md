@@ -1,3 +1,6 @@
+### 1.0.10
+* Bump `react` and `react-dom` peer dependency to include v19
+
 ### 1.0.9
 * Update REAMDE
 
