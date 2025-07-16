@@ -38,6 +38,10 @@ export type Props = {|
   // Threshold at which to pre-fetch data; defaults to 15.
   // A threshold of 15 means that data will start loading when a user scrolls within 15 rows.
   threshold?: number,
+
+  // Whether to memoize the unloaded ranges.
+  // Defaults to true.
+  enableMemoization?: boolean,
 |};
 
 export default class InfiniteLoader extends PureComponent<Props> {
@@ -110,6 +114,7 @@ export default class InfiniteLoader extends PureComponent<Props> {
       itemCount,
       minimumBatchSize = 10,
       threshold = 15,
+      enableMemoization = true
     } = this.props;
 
     const unloadedRanges = scanForUnloadedRanges({
@@ -122,7 +127,9 @@ export default class InfiniteLoader extends PureComponent<Props> {
 
     // Avoid calling load-rows unless range has changed.
     // This shouldn't be strictly necessary, but is maybe nice to do.
-    if (
+    if (enableMemoization) {
+      this._loadUnloadedRanges(unloadedRanges);
+    } else if (
       this._memoizedUnloadedRanges.length !== unloadedRanges.length ||
       this._memoizedUnloadedRanges.some(
         (startOrStop, index) => unloadedRanges[index] !== startOrStop

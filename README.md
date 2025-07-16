@@ -24,6 +24,7 @@ npm install --save react-window-infinite-loader
 | `loadMoreItems` | `(startIndex: number, stopIndex: number) => Promise<void>` | Callback to be invoked when more rows must be loaded. It should return a Promise that is resolved once all data has finished loading. |
 | `minimumBatchSize` | `?number` | Minimum number of rows to be loaded at a time; defaults to 10. This property can be used to batch requests to reduce HTTP requests. |
 | `threshold` | `?number` | Threshold at which to pre-fetch data; defaults to 15. A threshold of 15 means that data will start loading when a user scrolls within 15 rows. |
+| `enableMemoization` | `?boolean` | Memoize already fetched list item range; defaults to true. Useful when individual list item has large number of children and instead of list items, children are being fetched in paginated manner.
 
 ## Example usage
 
