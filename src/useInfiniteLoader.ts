@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { scanForUnloadedIndices } from './scanForUnloadedIndices';
-import type { Indices, OnRowsRendered, Props } from './types';
+import { useCallback, useMemo } from "react";
+import { scanForUnloadedIndices } from "./scanForUnloadedIndices";
+import type { Indices, OnRowsRendered, Props } from "./types";
 
 export function useInfiniteLoader({
   isRowLoaded,

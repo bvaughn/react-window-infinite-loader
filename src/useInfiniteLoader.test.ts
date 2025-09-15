@@ -1,17 +1,17 @@
-import { renderHook } from '@testing-library/react';
-import { describe, expect, test, vi } from 'vitest';
-import { useInfiniteLoader } from './useInfiniteLoader';
-import type { Props } from './types';
+import { renderHook } from "@testing-library/react";
+import { describe, expect, test, vi } from "vitest";
+import { useInfiniteLoader } from "./useInfiniteLoader";
+import type { Props } from "./types";
 
-describe('useInfiniteLoader', () => {
-  test('should not load rows that have already been loaded', () => {
+describe("useInfiniteLoader", () => {
+  test("should not load rows that have already been loaded", () => {
     const isRowLoaded = vi.fn(() => true);
 
     const { result } = renderHook(() =>
       useInfiniteLoader({
         isRowLoaded,
         loadMoreRows: () => {
-          throw Error('Unexpected');
+          throw Error("Unexpected");
         },
         rowCount: 10,
       })
@@ -27,7 +27,7 @@ describe('useInfiniteLoader', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(10);
   });
 
-  test('should call loadMoreRows when needed', () => {
+  test("should call loadMoreRows when needed", () => {
     const loadMoreRows = vi.fn(() => Promise.resolve());
 
     const { result } = renderHook(() =>
@@ -49,7 +49,7 @@ describe('useInfiniteLoader', () => {
     expect(loadMoreRows).toHaveBeenLastCalledWith(3, 4);
   });
 
-  test('should memoize callback when props are stable', () => {
+  test("should memoize callback when props are stable", () => {
     const isRowLoadedFn = () => true;
     const loadMoreRowsFn = () => Promise.resolve();
 
@@ -73,7 +73,7 @@ describe('useInfiniteLoader', () => {
     expect(result.current).toBe(prev);
   });
 
-  test('should recreate memoized callback when props change', () => {
+  test("should recreate memoized callback when props change", () => {
     const isRowLoadedFn = () => true;
     const loadMoreRowsFn = () => Promise.resolve();
 

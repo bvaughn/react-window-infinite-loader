@@ -1,8 +1,8 @@
-import { describe, expect, test, vi } from 'vitest';
-import { scanForUnloadedIndices } from './scanForUnloadedIndices';
+import { describe, expect, test, vi } from "vitest";
+import { scanForUnloadedIndices } from "./scanForUnloadedIndices";
 
-describe('scanForUnloadedIndices', () => {
-  test('should return an empty array for a range of rows that have all been loaded', () => {
+describe("scanForUnloadedIndices", () => {
+  test("should return an empty array for a range of rows that have all been loaded", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(2);
@@ -22,7 +22,7 @@ describe('scanForUnloadedIndices', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(3);
   });
 
-  test('return a range of only 1 unloaded row', () => {
+  test("return a range of only 1 unloaded row", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(2);
@@ -42,7 +42,7 @@ describe('scanForUnloadedIndices', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(3);
   });
 
-  test('return a range of multiple unloaded rows', () => {
+  test("return a range of multiple unloaded rows", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(2);
@@ -62,7 +62,7 @@ describe('scanForUnloadedIndices', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(3);
   });
 
-  test('return multiple ranges of unloaded rows', () => {
+  test("return multiple ranges of unloaded rows", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(6);
@@ -94,7 +94,7 @@ describe('scanForUnloadedIndices', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(7);
   });
 
-  test('return respect the minimum batch size param when fetching rows ahead', () => {
+  test("return respect the minimum batch size param when fetching rows ahead", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(9);
@@ -114,7 +114,7 @@ describe('scanForUnloadedIndices', () => {
     expect(isRowLoaded).toHaveBeenCalledTimes(8);
   });
 
-  test('return respect the minimum batch size param when fetching rows behind', () => {
+  test("return respect the minimum batch size param when fetching rows behind", () => {
     const isRowLoaded = vi.fn((index: number) => {
       expect(index).toBeGreaterThanOrEqual(0);
       expect(index).toBeLessThanOrEqual(9);
