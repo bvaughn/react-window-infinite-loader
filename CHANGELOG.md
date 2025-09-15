@@ -1,3 +1,35 @@
+### 2.0.0
+Rewrite to be compatible with `react-window` version two API.
+
+The recommended way to use this library is the new `useInfiniteLoader` hook:
+```tsx
+import { useInfiniteLoader } from "react-window-infinite-loader";
+
+function Example() {
+  const onRowsLoaded = useInfiniteLoader(props);
+
+  return <List onRowsLoaded={onRowsLoaded} {...rest} />;
+}
+```
+
+The `InfiniteLoader` component also exists, though it has changed since version 1:
+- Child function `onItemsRendered` parameter renamed to `onRowsRendered`
+- Child function `listRef` parameter removed
+
+```tsx
+import { InfiniteLoader } from "react-window-infinite-loader";
+
+function Example() {
+  return (
+    <InfiniteLoader {...props}>
+      {({ onRowsLoaded }) => <List onRowsLoaded={onRowsLoaded} {...rest} />}
+    </InfiniteLoader>
+  );
+}
+```
+
+> **Note** this package now includes and bundles its own TypeScript definitions and so the external `@types/react-window-infinite-loader` package has been deprecated.
+
 ### 1.0.10
 * Bump `react` and `react-dom` peer dependency to include v19
 
