@@ -21,9 +21,9 @@ The recommended way to use this library is the new `useInfiniteLoader` hook:
 import { useInfiniteLoader } from "react-window-infinite-loader";
 
 function Example() {
-  const onRowsLoaded = useInfiniteLoader(props);
+  const onRowsRendered = useInfiniteLoader(props);
 
-  return <List onRowsLoaded={onRowsLoaded} {...rest} />;
+  return <List onRowsRendered={onRowsRendered} {...rest} />;
 }
 ```
 
@@ -37,7 +37,7 @@ import { InfiniteLoader } from "react-window-infinite-loader";
 function Example() {
   return (
     <InfiniteLoader {...props}>
-      {({ onRowsLoaded }) => <List onRowsLoaded={onRowsLoaded} {...rest} />}
+      {({ onRowsRendered }) => <List onRowsRendered={onRowsRendered} {...rest} />}
     </InfiniteLoader>
   );
 }
