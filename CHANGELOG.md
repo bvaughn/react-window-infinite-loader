@@ -1,3 +1,6 @@
+### 2.0.1
+Fix homepage URL in `package.json`
+
 ### 2.0.0
 Rewrite to be compatible with `react-window` version two API.
 
