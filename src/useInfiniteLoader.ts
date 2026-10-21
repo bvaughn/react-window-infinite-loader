@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { scanForUnloadedIndices } from "./scanForUnloadedIndices";
 import type { Indices, OnRowsRendered, Props } from "./types";
 
@@ -9,12 +9,8 @@ export function useInfiniteLoader({
   rowCount,
   threshold = 15,
 }: Props) {
-  const pendingRowsCache = useMemo(() => {
-    void isRowLoaded;
-    void loadMoreRows;
-
-    return new Set();
-  }, [isRowLoaded, loadMoreRows]);
+  // Rows with an in-flight request; entries are removed once that request settles.
+  const [pendingRowsCache] = useState(() => new Set<number>());
 
   const isRowLoadedOrPending = useCallback(
     (index: number) => {
@@ -37,10 +33,10 @@ export function useInfiniteLoader({
         stopIndex: Math.min(rowCount - 1, stopIndex + threshold),
       });
 
-      for (let index = 0; index < unloadedIndices.length; index += 2) {
-        const { startIndex: unloadedStartIndex, stopIndex: unloadedStopIndex } =
-          unloadedIndices[index];
-
+      for (const {
+        startIndex: unloadedStartIndex,
+        stopIndex: unloadedStopIndex,
+      } of unloadedIndices) {
         for (
           let index = unloadedStartIndex;
           index <= unloadedStopIndex;
@@ -49,7 +45,21 @@ export function useInfiniteLoader({
           pendingRowsCache.add(index);
         }
 
-        loadMoreRows(unloadedStartIndex, unloadedStopIndex);
+        const clearPendingRows = () => {
+          for (
+            let index = unloadedStartIndex;
+            index <= unloadedStopIndex;
+            index++
+          ) {
+            pendingRowsCache.delete(index);
+          }
+        };
+
+        // Clear on failure too, so the rows can be requested again;
+        // handling the error itself is left to the caller's loadMoreRows.
+        Promise.resolve(loadMoreRows(unloadedStartIndex, unloadedStopIndex))
+          .catch(() => {})
+          .finally(clearPendingRows);
       }
     },
     [

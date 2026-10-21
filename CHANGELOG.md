@@ -1,3 +1,9 @@
+### 2.0.2
+- Fix `loadMoreRows` not being called for every other unloaded range when a list contained multiple gaps.
+- Rows are no longer marked as pending after the `loadMoreRows` Promise settles, so rows from a failed request are requested again. (Errors should be handled within `loadMoreRows`.)
+- Recreating the `isRowLoaded` or `loadMoreRows` callbacks (e.g. inline functions) no longer causes rows that are still loading to be requested again.
+- Fix `InfiniteLoader` TypeScript types so it can be used as a JSX component; the `children` render prop now returns `ReactNode`.
+
 ### 2.0.1
 Fix homepage URL in `package.json`
 

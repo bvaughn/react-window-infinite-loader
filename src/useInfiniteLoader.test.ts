@@ -49,6 +49,140 @@ describe("useInfiniteLoader", () => {
     expect(loadMoreRows).toHaveBeenLastCalledWith(3, 4);
   });
 
+  test("should load every unloaded range", () => {
+    const loadMoreRows = vi.fn(() => Promise.resolve());
+
+    const { result } = renderHook(() =>
+      useInfiniteLoader({
+        isRowLoaded: (index) => index % 4 === 0,
+        loadMoreRows,
+        minimumBatchSize: 1,
+        rowCount: 16,
+        threshold: 0,
+      })
+    );
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 15,
+    });
+
+    expect(loadMoreRows.mock.calls).toEqual([
+      [1, 3],
+      [5, 7],
+      [9, 11],
+      [13, 15],
+    ]);
+  });
+
+  test("should not reload rows that are still pending", () => {
+    const loadMoreRows = vi.fn(() => new Promise<void>(() => {}));
+
+    const { result } = renderHook(() =>
+      useInfiniteLoader({
+        isRowLoaded: () => false,
+        loadMoreRows,
+        rowCount: 5,
+        threshold: 0,
+      })
+    );
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+
+    expect(loadMoreRows).toHaveBeenCalledTimes(1);
+  });
+
+  test("should not reload pending rows when callbacks are recreated", () => {
+    const loadMoreRows = vi.fn<Props["loadMoreRows"]>(
+      () => new Promise<void>(() => {})
+    );
+
+    const { result, rerender } = renderHook(() =>
+      useInfiniteLoader({
+        isRowLoaded: () => false,
+        loadMoreRows: (startIndex, stopIndex) =>
+          loadMoreRows(startIndex, stopIndex),
+        rowCount: 5,
+        threshold: 0,
+      })
+    );
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+
+    rerender();
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+
+    expect(loadMoreRows).toHaveBeenCalledTimes(1);
+  });
+
+  test("should retry rows after a load fails", async () => {
+    const loadMoreRows = vi.fn(() => Promise.reject(Error("Expected")));
+
+    const { result } = renderHook(() =>
+      useInfiniteLoader({
+        isRowLoaded: () => false,
+        loadMoreRows,
+        rowCount: 5,
+        threshold: 0,
+      })
+    );
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+
+    await vi.waitFor(() => {
+      result.current({
+        startIndex: 0,
+        stopIndex: 4,
+      });
+
+      expect(loadMoreRows).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  test("should clear pending rows after a load succeeds", async () => {
+    const loadMoreRows = vi.fn(() => Promise.resolve());
+
+    const { result } = renderHook(() =>
+      useInfiniteLoader({
+        isRowLoaded: () => false,
+        loadMoreRows,
+        rowCount: 5,
+        threshold: 0,
+      })
+    );
+
+    result.current({
+      startIndex: 0,
+      stopIndex: 4,
+    });
+
+    await vi.waitFor(() => {
+      result.current({
+        startIndex: 0,
+        stopIndex: 4,
+      });
+
+      expect(loadMoreRows).toHaveBeenCalledTimes(2);
+    });
+  });
+
   test("should memoize callback when props are stable", () => {
     const isRowLoadedFn = () => true;
     const loadMoreRowsFn = () => Promise.resolve();
