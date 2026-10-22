@@ -18,7 +18,7 @@ describe("InfiniteLoader", () => {
 
     expect(screen.getByText("Rendered")).toBeTruthy();
     expect(children).toHaveBeenCalledWith({
-      onRowsRendered: expect.any(Function),
+      onRowsRendered: expect.any(Function)
     });
   });
 });

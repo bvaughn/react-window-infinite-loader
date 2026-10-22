@@ -1,13 +1,13 @@
 import { useCallback, useState } from "react";
-import { scanForUnloadedIndices } from "./scanForUnloadedIndices";
-import type { Indices, OnRowsRendered, Props } from "./types";
+import { scanForUnloadedIndices } from "../utils/scanForUnloadedIndices";
+import type { Indices, OnRowsRendered, Props } from "../types";
 
 export function useInfiniteLoader({
   isRowLoaded,
   loadMoreRows,
   minimumBatchSize = 10,
   rowCount,
-  threshold = 15,
+  threshold = 15
 }: Props) {
   // Rows with an in-flight request; entries are removed once that request settles.
   const [pendingRowsCache] = useState(() => new Set<number>());
@@ -30,12 +30,12 @@ export function useInfiniteLoader({
         minimumBatchSize,
         rowCount,
         startIndex: Math.max(0, startIndex - threshold),
-        stopIndex: Math.min(rowCount - 1, stopIndex + threshold),
+        stopIndex: Math.min(rowCount - 1, stopIndex + threshold)
       });
 
       for (const {
         startIndex: unloadedStartIndex,
-        stopIndex: unloadedStopIndex,
+        stopIndex: unloadedStopIndex
       } of unloadedIndices) {
         for (
           let index = unloadedStartIndex;
@@ -68,7 +68,7 @@ export function useInfiniteLoader({
       minimumBatchSize,
       pendingRowsCache,
       rowCount,
-      threshold,
+      threshold
     ]
   );
 

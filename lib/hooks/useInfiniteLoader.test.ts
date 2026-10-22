@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { useInfiniteLoader } from "./useInfiniteLoader";
-import type { Props } from "./types";
+import type { Props } from "../types";
 
 describe("useInfiniteLoader", () => {
   test("should not load rows that have already been loaded", () => {
@@ -13,7 +13,7 @@ describe("useInfiniteLoader", () => {
         loadMoreRows: () => {
           throw Error("Unexpected");
         },
-        rowCount: 10,
+        rowCount: 10
       })
     );
 
@@ -21,7 +21,7 @@ describe("useInfiniteLoader", () => {
 
     result.current({
       startIndex: 0,
-      stopIndex: 9,
+      stopIndex: 9
     });
 
     expect(isRowLoaded).toHaveBeenCalledTimes(10);
@@ -34,7 +34,7 @@ describe("useInfiniteLoader", () => {
       useInfiniteLoader({
         isRowLoaded: (index) => index <= 2,
         loadMoreRows,
-        rowCount: 5,
+        rowCount: 5
       })
     );
 
@@ -42,7 +42,7 @@ describe("useInfiniteLoader", () => {
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     expect(loadMoreRows).toHaveBeenCalled();
@@ -58,20 +58,20 @@ describe("useInfiniteLoader", () => {
         loadMoreRows,
         minimumBatchSize: 1,
         rowCount: 16,
-        threshold: 0,
+        threshold: 0
       })
     );
 
     result.current({
       startIndex: 0,
-      stopIndex: 15,
+      stopIndex: 15
     });
 
     expect(loadMoreRows.mock.calls).toEqual([
       [1, 3],
       [5, 7],
       [9, 11],
-      [13, 15],
+      [13, 15]
     ]);
   });
 
@@ -83,17 +83,17 @@ describe("useInfiniteLoader", () => {
         isRowLoaded: () => false,
         loadMoreRows,
         rowCount: 5,
-        threshold: 0,
+        threshold: 0
       })
     );
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     expect(loadMoreRows).toHaveBeenCalledTimes(1);
@@ -110,20 +110,20 @@ describe("useInfiniteLoader", () => {
         loadMoreRows: (startIndex, stopIndex) =>
           loadMoreRows(startIndex, stopIndex),
         rowCount: 5,
-        threshold: 0,
+        threshold: 0
       })
     );
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     rerender();
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     expect(loadMoreRows).toHaveBeenCalledTimes(1);
@@ -137,19 +137,19 @@ describe("useInfiniteLoader", () => {
         isRowLoaded: () => false,
         loadMoreRows,
         rowCount: 5,
-        threshold: 0,
+        threshold: 0
       })
     );
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     await vi.waitFor(() => {
       result.current({
         startIndex: 0,
-        stopIndex: 4,
+        stopIndex: 4
       });
 
       expect(loadMoreRows).toHaveBeenCalledTimes(2);
@@ -164,19 +164,19 @@ describe("useInfiniteLoader", () => {
         isRowLoaded: () => false,
         loadMoreRows,
         rowCount: 5,
-        threshold: 0,
+        threshold: 0
       })
     );
 
     result.current({
       startIndex: 0,
-      stopIndex: 4,
+      stopIndex: 4
     });
 
     await vi.waitFor(() => {
       result.current({
         startIndex: 0,
-        stopIndex: 4,
+        stopIndex: 4
       });
 
       expect(loadMoreRows).toHaveBeenCalledTimes(2);
@@ -191,12 +191,12 @@ describe("useInfiniteLoader", () => {
       ({
         isRowLoaded = isRowLoadedFn,
         loadMoreRows = loadMoreRowsFn,
-        rowCount = 5,
+        rowCount = 5
       }: Partial<Props> = {}) =>
         useInfiniteLoader({
           isRowLoaded,
           loadMoreRows,
-          rowCount,
+          rowCount
         })
     );
 
@@ -215,33 +215,33 @@ describe("useInfiniteLoader", () => {
       ({
         isRowLoaded = isRowLoadedFn,
         loadMoreRows = loadMoreRowsFn,
-        rowCount = 5,
+        rowCount = 5
       }: Partial<Props> = {}) =>
         useInfiniteLoader({
           isRowLoaded,
           loadMoreRows,
-          rowCount,
+          rowCount
         })
     );
 
     let prev = result.current;
 
     rerender({
-      isRowLoaded: () => true,
+      isRowLoaded: () => true
     });
     expect(result.current).not.toBe(prev);
 
     prev = result.current;
 
     rerender({
-      loadMoreRows: () => Promise.resolve(),
+      loadMoreRows: () => Promise.resolve()
     });
     expect(result.current).not.toBe(prev);
 
     prev = result.current;
 
     rerender({
-      rowCount: 10,
+      rowCount: 10
     });
     expect(result.current).not.toBe(prev);
   });

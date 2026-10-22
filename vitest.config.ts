@@ -6,6 +6,9 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: "jsdom",
-    },
+      include: ["lib/**/*.test.{ts,tsx}"],
+      restoreMocks: true,
+      setupFiles: "./vitest.setup.ts"
+    }
   })
 );

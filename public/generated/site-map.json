@@ -1,0 +1,97 @@
+[
+  {
+    "path": "/",
+    "text": "This package loads data for react-window lists and grids as the user scrolls. It can be used as a hook or as a component. Version 2 of this package is for use with version 2 of react-window. Documentation for version 1 can be found here. Installation Begin by installing the library from NPM: npm install react-window-infinite-loader TypeScript definitions are included within the published dist folder. Support Here are some ways to support this project: Become a GitHub sponsor Buy me a coffee",
+    "title": "Getting started with react-window-infinite-loader"
+  },
+  {
+    "headings": [
+      {
+        "id": "unknown-row-count",
+        "title": "What if I don't know how many rows there are?",
+        "text": "What if I don't know how many rows there are? If your data is paginated, you can render one more row than you have loaded for as long as there are more pages to load. When that row is scrolled into view, it will trigger loading the next page. function Example({\n hasNextPage,\n rows\n}: {\n hasNextPage: boolean;\n rows: string[];\n}) {\n // Render an extra row while more rows are available;\n // scrolling it into view will trigger loading the next page\n const rowCount = hasNextPage ? rows.length + 1 : rows.length;\n \n const onRowsRendered = useInfiniteLoader({\n isRowLoaded,\n loadMoreRows,\n rowCount\n });\n \n return (\n <List\n onRowsRendered={onRowsRendered}\n rowComponent={RowComponent}\n rowCount={rowCount}\n rowHeight={25}\n rowProps={{ rows }}\n />\n );\n} Alternately, rowCount can be set to an arbitrarily high number."
+      },
+      {
+        "id": "error-handling",
+        "title": "What happens if loading rows fails?",
+        "text": "What happens if loading rows fails? Rows are considered pending until the Promise returned by loadMoreRows settles. After that, rows that are still not loaded will be requested again the next time they are rendered. Errors should be handled within loadMoreRows, for example: async function loadMoreRows(startIndex: number, stopIndex: number) {\n try {\n const rows = await fetchRows(startIndex, stopIndex);\n storeRows(startIndex, rows);\n } catch (error) {\n // These rows will be requested again the next time they are rendered\n showError(error);\n }\n}"
+      }
+    ],
+    "path": "/common-questions",
+    "text": "",
+    "title": "Common questions"
+  },
+  {
+    "path": "/components/infinite-loader",
+    "section": "Components",
+    "text": "The InfiniteLoader component accepts the same props as the useInfiniteLoader hook and passes the onRowsRendered callback to a render prop. import { useCallback, useState } from \"react\";\nimport { List } from \"react-window\";\nimport { InfiniteLoader } from \"react-window-infinite-loader\";\n \nconst ROW_COUNT = 1_000;\n \nfunction Example() {\n const [rows, setRows] = useState(() => new Map<number, string>());\n \n const isRowLoaded = useCallback((index: number) => rows.has(index), [rows]);\n \n const loadMoreRows = useCallback(\n async (startIndex: number, stopIndex: number) => {\n // fetchRows loads a range of rows (e.g. from a server)\n const loadedRows = await fetchRows(startIndex, stopIndex);\n \n setRows((prev) => {\n const next = new Map(prev);\n loadedRows.forEach((row, offset) => next.set(startIndex + offset, row));\n return next;\n });\n },\n []\n );\n \n return (\n <InfiniteLoader\n isRowLoaded={isRowLoaded}\n loadMoreRows={loadMoreRows}\n rowCount={ROW_COUNT}\n >\n {({ onRowsRendered }) => (\n <List\n onRowsRendered={onRowsRendered}\n rowComponent={RowComponent}\n rowCount={ROW_COUNT}\n rowHeight={25}\n rowProps={{ rows }}\n />\n )}\n </InfiniteLoader>\n );\n} Continue to InfiniteLoader props…",
+    "title": "InfiniteLoader"
+  },
+  {
+    "headings": [
+      {
+        "id": "children",
+        "title": "children",
+        "text": "children: (params: { onRowsRendered: OnRowsRendered; }) => ReactNode Render prop that receives an onRowsRendered callback to pass to a List."
+      },
+      {
+        "id": "isRowLoaded",
+        "title": "isRowLoaded",
+        "text": "isRowLoaded: (index: number) => boolean Function responsible for tracking the loaded state of each item."
+      },
+      {
+        "id": "loadMoreRows",
+        "title": "loadMoreRows",
+        "text": "loadMoreRows: (startIndex: number, stopIndex: number) => Promise<void> Callback to be invoked when more rows must be loaded.\nIt should return a Promise that is resolved once all data has finished loading."
+      },
+      {
+        "id": "rowCount",
+        "title": "rowCount",
+        "text": "rowCount: number Number of rows in list; can be arbitrary high number if actual number is unknown."
+      },
+      {
+        "id": "minimumBatchSize",
+        "title": "minimumBatchSize",
+        "text": "minimumBatchSize?: number Minimum number of rows to be loaded at a time; defaults to 10.\nThis property can be used to batch requests to reduce HTTP requests."
+      },
+      {
+        "id": "threshold",
+        "title": "threshold",
+        "text": "threshold?: number Threshold at which to pre-fetch data; defaults to 15.\nA threshold of 15 means that data will start loading when a user scrolls within 15 rows.\n The useInfiniteLoader hook accepts the same parameters, except for children."
+      }
+    ],
+    "path": "/components/infinite-loader/props",
+    "section": "Components",
+    "text": "Loads rows as they are scrolled into view; a render prop alternative to the useInfiniteLoader hook.",
+    "title": "InfiniteLoader component props"
+  },
+  {
+    "path": "/hooks/use-infinite-loader",
+    "section": "Hooks",
+    "text": "The useInfiniteLoader hook returns an onRowsRendered callback to pass to a react-window List. As rows are scrolled into view, it calls loadMoreRows for any that have not been loaded yet. Scroll the list below to try it out: import { useCallback, useState } from \"react\";\nimport { List } from \"react-window\";\nimport { useInfiniteLoader } from \"react-window-infinite-loader\";\n \nconst ROW_COUNT = 1_000;\n \nfunction Example() {\n const [rows, setRows] = useState(() => new Map<number, string>());\n \n const isRowLoaded = useCallback((index: number) => rows.has(index), [rows]);\n \n const loadMoreRows = useCallback(\n async (startIndex: number, stopIndex: number) => {\n // fetchRows loads a range of rows (e.g. from a server)\n const loadedRows = await fetchRows(startIndex, stopIndex);\n \n setRows((prev) => {\n const next = new Map(prev);\n loadedRows.forEach((row, offset) => next.set(startIndex + offset, row));\n return next;\n });\n },\n []\n );\n \n const onRowsRendered = useInfiniteLoader({\n isRowLoaded,\n loadMoreRows,\n rowCount: ROW_COUNT\n });\n \n return (\n <List\n onRowsRendered={onRowsRendered}\n rowComponent={RowComponent}\n rowCount={ROW_COUNT}\n rowHeight={25}\n rowProps={{ rows }}\n />\n );\n} Rows that have not loaded yet can render a placeholder: import type { RowComponentProps } from \"react-window\";\n \nfunction RowComponent({\n index,\n rows,\n style\n}: RowComponentProps<{ rows: Map<number, string> }>) {\n return (\n <div className=\"flex items-center px-2\" style={style}>\n {rows.get(index) ?? <span className=\"text-slate-500\">Loading…</span>}\n </div>\n );\n} Rows are not requested again while a request for them is in progress. Once the Promise returned by loadMoreRows settles, rows that are still not loaded (e.g. because the request failed) will be requested again the next time they are rendered. Continue to useInfiniteLoader parameters…",
+    "title": "useInfiniteLoader"
+  },
+  {
+    "headings": [
+      {
+        "id": "parameters",
+        "title": "Parameters",
+        "text": "Parameters isRowLoaded : (index: number) => boolean Function responsible for tracking the loaded state of each row. loadMoreRows : (startIndex: number, stopIndex: number) => Promise<void> Callback to be invoked when more rows must be loaded. It should return a Promise that is resolved once all data has finished loading. Rows are not requested again while a request for them is in progress. Once the Promise settles, rows that are still not loaded (e.g. because the request failed) will be requested again the next time they are rendered. Errors should be handled within loadMoreRows. minimumBatchSize ?: number = 10 Minimum number of rows to be loaded at a time. This can be used to batch requests to reduce HTTP requests. rowCount : number Number of rows in the list; can be an arbitrarily high number if the actual number is unknown. threshold ?: number = 15 Threshold at which to pre-fetch data. A threshold of 15 means that data will start loading when a user scrolls within 15 rows."
+      },
+      {
+        "id": "return-value",
+        "title": "Return value",
+        "text": "Return value onRowsRendered : (indices: { startIndex: number; stopIndex: number }) => void Callback to pass to the onRowsRendered prop of a List. A Grid reports the cells it renders with onCellsRendered instead, so pass along its row indices: function Example({\n columnCount,\n rowCount\n}: {\n columnCount: number;\n rowCount: number;\n}) {\n const onRowsRendered = useInfiniteLoader({\n isRowLoaded,\n loadMoreRows,\n rowCount\n });\n \n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{}}\n columnCount={columnCount}\n columnWidth={100}\n onCellsRendered={({ rowStartIndex, rowStopIndex }) =>\n onRowsRendered({ startIndex: rowStartIndex, stopIndex: rowStopIndex })\n }\n rowCount={rowCount}\n rowHeight={25}\n />\n );\n} Continue to InfiniteLoader component…"
+      }
+    ],
+    "path": "/hooks/use-infinite-loader/parameters",
+    "section": "Hooks",
+    "text": "The useInfiniteLoader hook accepts a single object with the parameters below. Refer to the useInfiniteLoader page for an example of how to use it.",
+    "title": "useInfiniteLoader parameters"
+  },
+  {
+    "path": "/support",
+    "text": "GitHub is the easiest place to look for help, but it's probably not the fastest. This project is maintained by a single developer so there is limited bandwidth for answering questions. I recommend asking questions on Stack Overflow or Reddit to start with. Both sites have active communities who often respond quickly. If you don't find an answer there you can try opening a GitHub issue- but please take a moment first to see if your question has has already been answered before opening a new one.",
+    "title": "Support"
+  }
+]

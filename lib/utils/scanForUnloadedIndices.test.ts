@@ -15,7 +15,7 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 3,
         startIndex: 0,
-        stopIndex: 2,
+        stopIndex: 2
       })
     ).toEqual([]);
 
@@ -35,7 +35,7 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 3,
         startIndex: 0,
-        stopIndex: 2,
+        stopIndex: 2
       })
     ).toEqual([{ startIndex: 1, stopIndex: 1 }]);
 
@@ -55,7 +55,7 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 3,
         startIndex: 0,
-        stopIndex: 2,
+        stopIndex: 2
       })
     ).toEqual([{ startIndex: 0, stopIndex: 1 }]);
 
@@ -83,12 +83,12 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 7,
         startIndex: 0,
-        stopIndex: 6,
+        stopIndex: 6
       })
     ).toEqual([
       { startIndex: 1, stopIndex: 2 },
       { startIndex: 4, stopIndex: 4 },
-      { startIndex: 6, stopIndex: 6 },
+      { startIndex: 6, stopIndex: 6 }
     ]);
 
     expect(isRowLoaded).toHaveBeenCalledTimes(7);
@@ -107,7 +107,7 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 10,
         startIndex: 0,
-        stopIndex: 4,
+        stopIndex: 4
       })
     ).toEqual([{ startIndex: 4, stopIndex: 7 }]);
 
@@ -127,7 +127,7 @@ describe("scanForUnloadedIndices", () => {
         isRowLoaded,
         rowCount: 10,
         startIndex: 6,
-        stopIndex: 9,
+        stopIndex: 9
       })
     ).toEqual([{ startIndex: 3, stopIndex: 6 }]);
 

@@ -43,16 +43,77 @@ function Example() {
 }
 ```
 
-### Required props
-| Name | Type | Description |
-| --- | --- | --- |
-| `children` | `({ onRowsRendered: Function }) => ReactNode` | Render prop; see below for example usage. |
-| `isRowLoaded` | `(index: number) => boolean` | Function responsible for tracking the loaded state of each row. |
-| `loadMoreRows` | `(startIndex: number, stopIndex: number) => Promise<void>` | Callback to be invoked when more rows must be loaded. It should return a Promise that is resolved once all data has finished loading. |
-| `rowCount` | `number` | Number of rows in list; can be arbitrary high number if actual number is unknown. |
+### InfiniteLoader
 
-### Optional props
-| Name | Type | Description |
-| --- | --- | --- |
-| `minimumBatchSize` | `number` | Minimum number of rows to be loaded at a time; defaults to 10. This property can be used to batch requests to reduce HTTP requests. |
-| `threshold` | `number` | Threshold at which to pre-fetch data; defaults to 15. A threshold of 15 means that data will start loading when a user scrolls within 15 rows. |
+<!-- InfiniteLoader:description:begin -->
+Loads rows as they are scrolled into view; a render prop alternative to the `useInfiniteLoader` hook.
+<!-- InfiniteLoader:description:end -->
+
+The `useInfiniteLoader` hook accepts the same props, except for `children`.
+
+#### Required props
+
+<!-- InfiniteLoader:required-props:begin -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>isRowLoaded</td>
+      <td><p>Function responsible for tracking the loaded state of each item.</p>
+</td>
+    </tr>
+    <tr>
+      <td>loadMoreRows</td>
+      <td><p>Callback to be invoked when more rows must be loaded.
+It should return a Promise that is resolved once all data has finished loading.</p>
+</td>
+    </tr>
+    <tr>
+      <td>rowCount</td>
+      <td><p>Number of rows in list; can be arbitrary high number if actual number is unknown.</p>
+</td>
+    </tr>
+    <tr>
+      <td>children</td>
+      <td><p>Render prop that receives an <code>onRowsRendered</code> callback to pass to a <code>List</code>.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- InfiniteLoader:required-props:end -->
+
+#### Optional props
+
+<!-- InfiniteLoader:optional-props:begin -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>minimumBatchSize</td>
+      <td><p>Minimum number of rows to be loaded at a time; defaults to 10.
+This property can be used to batch requests to reduce HTTP requests.</p>
+</td>
+    </tr>
+    <tr>
+      <td>threshold</td>
+      <td><p>Threshold at which to pre-fetch data; defaults to 15.
+A threshold of 15 means that data will start loading when a user scrolls within 15 rows.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- InfiniteLoader:optional-props:end -->

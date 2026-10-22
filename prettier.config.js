@@ -1,12 +1,9 @@
 export default {
   overrides: [
     {
-      files: "*.ts, *.tsx",
-      excludeFiles: "dist, docs, public",
-    },
+      files: "*.ts, *.tsx"
+    }
   ],
-  semi: true,
   singleQuote: false,
-  tabWidth: 2,
-  trailingComma: "es5",
+  trailingComma: "none"
 };

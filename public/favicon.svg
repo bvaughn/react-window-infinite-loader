@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="rwil-logo">
+  <style>
+    .rwil-logo path, .rwil-logo rect {
+      stroke: #1A1A1A;
+    }
+    .rwil-logo circle {
+      fill: #1A1A1A;
+    }
+    @media (prefers-color-scheme: dark) {
+      .rwil-logo path, .rwil-logo rect {
+        stroke: #ffffff;
+      }
+      .rwil-logo circle {
+        fill: #ffffff;
+      }
+    }
+  </style>
+  <rect x="2.25" y="4.75" width="15.5" height="10.5" rx="2.75" fill="none" stroke-width="2.5" />
+  <path d="M6 8.25h8" fill="none" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M6 1.25h8" fill="none" stroke-width="2.5" stroke-linecap="round" opacity="0.45" />
+  <g opacity="0.45">
+    <circle cx="6.5" cy="11.75" r="1.25" />
+    <circle cx="10" cy="11.75" r="1.25" />
+    <circle cx="13.5" cy="11.75" r="1.25" />
+    <circle cx="6.5" cy="18.75" r="1.25" />
+    <circle cx="10" cy="18.75" r="1.25" />
+    <circle cx="13.5" cy="18.75" r="1.25" />
+  </g>
+</svg>
