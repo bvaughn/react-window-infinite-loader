@@ -1,11 +1,11 @@
-import type { Indices } from "./types";
+import type { Indices } from "../types";
 
 export function scanForUnloadedIndices({
   isRowLoaded,
   minimumBatchSize,
   rowCount,
   startIndex,
-  stopIndex,
+  stopIndex
 }: {
   isRowLoaded: (index: number) => boolean;
   minimumBatchSize: number;
@@ -27,7 +27,7 @@ export function scanForUnloadedIndices({
     } else if (currentStopIndex >= 0) {
       indices.push({
         startIndex: currentStartIndex,
-        stopIndex: currentStopIndex,
+        stopIndex: currentStopIndex
       });
 
       currentStartIndex = currentStopIndex = -1;
@@ -55,7 +55,7 @@ export function scanForUnloadedIndices({
 
     indices.push({
       startIndex: currentStartIndex,
-      stopIndex: currentStopIndex,
+      stopIndex: currentStopIndex
     });
   }
 

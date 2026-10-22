@@ -1,0 +1,27 @@
+<svg viewBox="0 0 1200 630" width="600" height="315" xmlns="http://www.w3.org/2000/svg">
+  <linearGradient id="og-image-bg">
+    <stop offset="0%" stop-color="#00bcff" />
+    <stop offset="100%" stop-color="#8e51ff" />
+  </linearGradient>
+  <rect fill="url(#og-image-bg)" width="1200" height="630" />
+  <svg viewBox="0 0 20 20" x="55" y="95" width="440" height="440" overflow="visible">
+    <g fill="none" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round">
+      <rect x="2.25" y="4.75" width="15.5" height="10.5" rx="2.75" />
+      <path d="M6 8.25h8" />
+      <path d="M6 1.25h8" opacity="0.45" />
+    </g>
+    <g fill="#1A1A1A" opacity="0.45">
+      <circle cx="6.5" cy="11.75" r="1.25" />
+      <circle cx="10" cy="11.75" r="1.25" />
+      <circle cx="13.5" cy="11.75" r="1.25" />
+      <circle cx="6.5" cy="18.75" r="1.25" />
+      <circle cx="10" cy="18.75" r="1.25" />
+      <circle cx="13.5" cy="18.75" r="1.25" />
+    </g>
+  </svg>
+  <g fill="#fff" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="bold">
+    <text x="535" y="200" font-size="64" opacity="0.85">react-window</text>
+    <text x="530" y="335" font-size="140">infinite</text>
+    <text x="530" y="475" font-size="140">loader</text>
+  </g>
+</svg>

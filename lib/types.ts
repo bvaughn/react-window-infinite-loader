@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type Indices = {
   startIndex: number;
   stopIndex: number;
@@ -33,4 +35,11 @@ export type Props = {
    * Number of rows in list; can be arbitrary high number if actual number is unknown.
    */
   rowCount: number;
+};
+
+export type InfiniteLoaderProps = Props & {
+  /**
+   * Render prop that receives an `onRowsRendered` callback to pass to a `List`.
+   */
+  children: (params: { onRowsRendered: OnRowsRendered }) => ReactNode;
 };

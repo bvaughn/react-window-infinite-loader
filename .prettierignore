@@ -1,5 +1,6 @@
-dist/*
-example/build/*
-example/src/code/*
-package-lock.json
-yarn.lock
+/dist
+/docs
+/public
+
+README.md
+pnpm-lock.yaml
