@@ -43,17 +43,17 @@ function Example() {
 }
 ```
 
+The `useInfiniteLoader` hook accepts the same props as `InfiniteLoader`, except for `children`.
+
+<!-- react-lib-tools:api:begin -->
+
+## Components
+
 ### InfiniteLoader
 
-<!-- InfiniteLoader:description:begin -->
 Loads rows as they are scrolled into view; a render prop alternative to the `useInfiniteLoader` hook.
-<!-- InfiniteLoader:description:end -->
-
-The `useInfiniteLoader` hook accepts the same props, except for `children`.
 
 #### Required props
-
-<!-- InfiniteLoader:required-props:begin -->
 
 <table>
   <thead>
@@ -87,11 +87,7 @@ It should return a Promise that is resolved once all data has finished loading.<
   </tbody>
 </table>
 
-<!-- InfiniteLoader:required-props:end -->
-
 #### Optional props
-
-<!-- InfiniteLoader:optional-props:begin -->
 
 <table>
   <thead>
@@ -116,4 +112,4 @@ A threshold of 15 means that data will start loading when a user scrolls within 
   </tbody>
 </table>
 
-<!-- InfiniteLoader:optional-props:end -->
+<!-- react-lib-tools:api:end -->
