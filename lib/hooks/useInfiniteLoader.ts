@@ -2,6 +2,11 @@ import { useCallback, useState } from "react";
 import { scanForUnloadedIndices } from "../utils/scanForUnloadedIndices";
 import type { Indices, OnRowsRendered, Props } from "../types";
 
+/**
+ * Loads rows as they are scrolled into view.
+ *
+ * @returns An `onRowsRendered` callback to pass to a react-window `List`
+ */
 export function useInfiniteLoader({
   isRowLoaded,
   loadMoreRows,
